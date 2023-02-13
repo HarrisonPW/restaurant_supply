@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.DisplayPilotViewMapper">
+
+    <resultMap type="com.example.restaurantsupply.model.DisplayPilotView" id="DisplayPilotViewMap">
+        <result property="username" column="username" />
+        <result property="licenseid" column="licenseID" />
+        <result property="experience" column="experience" />
+        <result property="numDrones" column="num_drones" />
+        <result property="numLocations" column="num_locations" />
+    </resultMap>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DisplayPilotViewMap">
+        select
+          username, licenseID, experience, num_drones, num_locations
+        from display_pilot_view
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="licenseid != null and licenseid != ''">
+                and licenseID = #{licenseid}
+            </if>
+            <if test="experience != null">
+                and experience = #{experience}
+            </if>
+            <if test="numDrones != null">
+                and num_drones = #{numDrones}
+            </if>
+            <if test="numLocations != null">
+                and num_locations = #{numLocations}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+

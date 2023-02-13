@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.DisplayEmployeeViewMapper">
+
+    <resultMap type="com.example.restaurantsupply.model.DisplayEmployeeView" id="DisplayEmployeeViewMap">
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="taxid" column="taxID" jdbcType="VARCHAR"/>
+        <result property="salary" column="salary" jdbcType="INTEGER"/>
+        <result property="hired" column="hired" jdbcType="TIMESTAMP"/>
+        <result property="employeeExperience" column="employee_experience" jdbcType="INTEGER"/>
+        <result property="licenseid" column="licenseID" jdbcType="VARCHAR"/>
+        <result property="pilotingExperience" column="piloting_experience" jdbcType="VARCHAR"/>
+        <result property="managerStatus" column="manager_status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryAll" resultMap="DisplayEmployeeViewMap">
+        select
+        username, taxID, salary, hired, employee_experience, licenseID, piloting_experience, manager_status
+        from display_employee_view
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="taxid != null and taxid != ''">
+                and taxID = #{taxid}
+            </if>
+            <if test="salary != null">
+                and salary = #{salary}
+            </if>
+            <if test="hired != null">
+                and hired = #{hired}
+            </if>
+            <if test="employeeExperience != null">
+                and employee_experience = #{employeeExperience}
+            </if>
+            <if test="licenseid != null and licenseid != ''">
+                and licenseID = #{licenseid}
+            </if>
+            <if test="pilotingExperience != null and pilotingExperience != ''">
+                and piloting_experience = #{pilotingExperience}
+            </if>
+            <if test="managerStatus != null and managerStatus != ''">
+                and manager_status = #{managerStatus}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
+

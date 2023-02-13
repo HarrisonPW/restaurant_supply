@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.DisplayIngredientViewMapper">
+
+    <resultMap type="com.example.restaurantsupply.model.DisplayIngredientView" id="DisplayIngredientViewMap">
+        <result property="iname" column="iname" />
+        <result property="hover" column="hover" />
+        <result property="amountAvailable" column="amount_available" />
+        <result property="lowPrice" column="low_price" />
+        <result property="highPrice" column="high_price" />
+    </resultMap>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DisplayIngredientViewMap">
+        select
+          iname, hover, amount_available, low_price, high_price
+        from display_ingredient_view
+        <where>
+            <if test="iname != null and iname != ''">
+                and iname = #{iname}
+            </if>
+            <if test="hover != null and hover != ''">
+                and hover = #{hover}
+            </if>
+            <if test="amountAvailable != null">
+                and amount_available = #{amountAvailable}
+            </if>
+            <if test="lowPrice != null">
+                and low_price = #{lowPrice}
+            </if>
+            <if test="highPrice != null">
+                and high_price = #{highPrice}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+

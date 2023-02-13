@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.UsersMapper">
+
+    <resultMap type="com.example.restaurantsupply.domain.Users" id="UsersMap">
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="firstName" column="first_name" jdbcType="VARCHAR"/>
+        <result property="lastName" column="last_name" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="birthdate" column="birthdate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="UsersMap">
+        select username,
+               first_name,
+               last_name,
+               address,
+               birthdate
+        from users
+        where username = #{username}
+    </select>
+
+
+    <select id="queryAllByLimit" resultMap="UsersMap">
+        select username,
+               first_name,
+               last_name,
+               address,
+               birthdate
+        from users limit #{offset}, #{limit}
+    </select>
+
+
+    <select id="queryAll" resultMap="UsersMap">
+        select
+        username, first_name, last_name, address, birthdate
+        from users
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="firstName != null and firstName != ''">
+                and first_name = #{firstName}
+            </if>
+            <if test="lastName != null and lastName != ''">
+                and last_name = #{lastName}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="birthdate != null">
+                and birthdate = #{birthdate}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" keyProperty="username" useGeneratedKeys="true">
+        insert into users(first_name, last_name, address, birthdate)
+        values (#{firstName}, #{lastName}, #{address}, #{birthdate})
+    </insert>
+
+
+    <update id="update">
+        update users
+        <set>
+            <if test="firstName != null and firstName != ''">
+                first_name = #{firstName},
+            </if>
+            <if test="lastName != null and lastName != ''">
+                last_name = #{lastName},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="birthdate != null">
+                birthdate = #{birthdate},
+            </if>
+        </set>
+        where username = #{username}
+    </update>
+
+
+    <delete id="deleteById">
+        delete
+        from users
+        where username = #{username}
+    </delete>
+
+</mapper>
+

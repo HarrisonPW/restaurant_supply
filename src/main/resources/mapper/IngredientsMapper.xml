@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.IngredientsMapper">
+
+    <resultMap type="com.example.restaurantsupply.domain.Ingredients" id="IngredientsMap">
+        <result property="barcode" column="barcode" jdbcType="VARCHAR"/>
+        <result property="iname" column="iname" jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="IngredientsMap">
+        select barcode,
+               iname,
+               weight
+        from ingredients
+        where barcode = #{barcode}
+    </select>
+
+
+    <select id="queryAllByLimit" resultMap="IngredientsMap">
+        select barcode,
+               iname,
+               weight
+        from ingredients limit #{offset}, #{limit}
+    </select>
+
+
+    <select id="queryAll" resultMap="IngredientsMap">
+        select
+        barcode, iname, weight
+        from ingredients
+        <where>
+            <if test="barcode != null and barcode != ''">
+                and barcode = #{barcode}
+            </if>
+            <if test="iname != null and iname != ''">
+                and iname = #{iname}
+            </if>
+            <if test="weight != null">
+                and weight = #{weight}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" keyProperty="barcode" useGeneratedKeys="true">
+        call add_ingredient(#{barcode}, #{iname}, #{weight})
+    </insert>
+
+
+    <update id="update">
+        update ingredients
+        <set>
+            <if test="iname != null and iname != ''">
+                iname = #{iname},
+            </if>
+            <if test="weight != null">
+                weight = #{weight},
+            </if>
+        </set>
+        where barcode = #{barcode}
+    </update>
+
+
+    <delete id="deleteById">
+        call remove_ingredient(#{barcode})
+    </delete>
+
+</mapper>
+

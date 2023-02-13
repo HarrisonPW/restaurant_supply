@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.LocationsMapper">
+
+    <resultMap type="com.example.restaurantsupply.domain.Locations" id="LocationsMap">
+        <result property="label" column="label" jdbcType="VARCHAR"/>
+        <result property="xCoord" column="x_coord" jdbcType="INTEGER"/>
+        <result property="yCoord" column="y_coord" jdbcType="INTEGER"/>
+        <result property="space" column="space" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="LocationsMap">
+        select label,
+               x_coord,
+               y_coord, space
+        from locations
+        where label = #{label}
+    </select>
+
+
+    <select id="queryAllByLimit" resultMap="LocationsMap">
+        select label,
+               x_coord,
+               y_coord, space
+        from locations
+            limit #{offset}, #{limit}
+    </select>
+
+
+    <select id="queryAll" resultMap="LocationsMap">
+        select
+        label, x_coord, y_coord, space
+        from locations
+        <where>
+            <if test="label != null and label != ''">
+                and label = #{label}
+            </if>
+            <if test="xCoord != null">
+                and x_coord = #{xCoord}
+            </if>
+            <if test="yCoord != null">
+                and y_coord = #{yCoord}
+            </if>
+            <if test="space != null">
+                and space = #{space}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" keyProperty="label" useGeneratedKeys="true">
+        call add_location(#{label}, #{xCoord}, #{yCoord}, #{space})
+    </insert>
+
+
+    <update id="update">
+        update locations
+        <set>
+            <if test="xCoord != null">
+                x_coord = #{xCoord},
+            </if>
+            <if test="yCoord != null">
+                y_coord = #{yCoord},
+            </if>
+            <if test="space != null">
+                space = #{space},
+            </if>
+        </set>
+        where label = #{label}
+    </update>
+
+
+    <delete id="deleteById">
+        delete
+        from locations
+        where label = #{label}
+    </delete>
+
+</mapper>
+

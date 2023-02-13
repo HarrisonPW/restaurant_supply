@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.DisplayServiceViewMapper">
+
+    <resultMap type="com.example.restaurantsupply.model.DisplayServiceView" id="DisplayServiceViewMap">
+        <result property="id" column="id" />
+        <result property="longName" column="long_name" />
+        <result property="homeBase" column="home_base" />
+        <result property="manager" column="manager" />
+        <result property="revenue" column="revenue" />
+        <result property="ingredientsCarried" column="ingredients_carried" />
+        <result property="costCarried" column="cost_carried" />
+        <result property="weightCarried" column="weight_carried" />
+    </resultMap>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DisplayServiceViewMap">
+        select
+          id, long_name, home_base, manager, revenue, ingredients_carried, cost_carried, weight_carried
+        from display_service_view
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="longName != null and longName != ''">
+                and long_name = #{longName}
+            </if>
+            <if test="homeBase != null and homeBase != ''">
+                and home_base = #{homeBase}
+            </if>
+            <if test="manager != null and manager != ''">
+                and manager = #{manager}
+            </if>
+            <if test="revenue != null">
+                and revenue = #{revenue}
+            </if>
+            <if test="ingredientsCarried != null">
+                and ingredients_carried = #{ingredientsCarried}
+            </if>
+            <if test="costCarried != null">
+                and cost_carried = #{costCarried}
+            </if>
+            <if test="weightCarried != null">
+                and weight_carried = #{weightCarried}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.DeliveryServicesMapper">
+
+    <resultMap type="com.example.restaurantsupply.domain.DeliveryServices" id="DeliveryServicesMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="longName" column="long_name" jdbcType="VARCHAR"/>
+        <result property="homeBase" column="home_base" jdbcType="VARCHAR"/>
+        <result property="manager" column="manager" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="DeliveryServicesMap">
+        select id,
+               long_name,
+               home_base,
+               manager
+        from delivery_services
+        where id = #{id}
+    </select>
+
+
+    <select id="queryAllByLimit" resultMap="DeliveryServicesMap">
+        select id,
+               long_name,
+               home_base,
+               manager
+        from delivery_services limit #{offset}, #{limit}
+    </select>
+
+
+    <select id="queryAll" resultMap="DeliveryServicesMap">
+        select
+        id, long_name, home_base, manager
+        from delivery_services
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="longName != null and longName != ''">
+                and long_name = #{longName}
+            </if>
+            <if test="homeBase != null and homeBase != ''">
+                and home_base = #{homeBase}
+            </if>
+            <if test="manager != null and manager != ''">
+                and manager = #{manager}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        call add_service(#{id}, #{longName}, #{homeBase}, #{manager})
+    </insert>
+
+
+    <update id="update">
+        update delivery_services
+        <set>
+            <if test="longName != null and longName != ''">
+                long_name = #{longName},
+            </if>
+            <if test="homeBase != null and homeBase != ''">
+                home_base = #{homeBase},
+            </if>
+            <if test="manager != null and manager != ''">
+                manager = #{manager},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="manage">
+        call manage_service(#{longName}, #{id})
+    </update>
+
+
+    <delete id="deleteById">
+        delete
+        from delivery_services
+        where id = #{id}
+    </delete>
+
+</mapper>
+

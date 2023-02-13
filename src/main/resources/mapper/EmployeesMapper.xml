@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.EmployeesMapper">
+
+    <resultMap type="com.example.restaurantsupply.domain.Employees" id="EmployeesMap">
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="taxid" column="taxID" jdbcType="VARCHAR"/>
+        <result property="hired" column="hired" jdbcType="TIMESTAMP"/>
+        <result property="experience" column="experience" jdbcType="INTEGER"/>
+        <result property="salary" column="salary" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="EmployeesMap">
+        select username,
+               taxID,
+               hired,
+               experience,
+               salary
+        from employees
+        where username = #{username}
+    </select>
+
+
+    <select id="queryAllByLimit" resultMap="EmployeesMap">
+        select username,
+               taxID,
+               hired,
+               experience,
+               salary
+        from employees limit #{offset}, #{limit}
+    </select>
+
+
+    <select id="queryAll" resultMap="EmployeesMap">
+        select
+        username, taxID, hired, experience, salary
+        from employees
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="taxid != null and taxid != ''">
+                and taxID = #{taxid}
+            </if>
+            <if test="hired != null">
+                and hired = #{hired}
+            </if>
+            <if test="experience != null">
+                and experience = #{experience}
+            </if>
+            <if test="salary != null">
+                and salary = #{salary}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" keyProperty="username" useGeneratedKeys="true">
+        call add_employee(#{username}, #{firstName}, #{lastName}, #{address}, #{birthdate}, #{taxid}, #{hired}, #{employeeExperience}, #{salary})
+    </insert>
+
+
+    <update id="update">
+        update employees
+        <set>
+            <if test="taxid != null and taxid != ''">
+                taxID = #{taxid},
+            </if>
+            <if test="hired != null">
+                hired = #{hired},
+            </if>
+            <if test="experience != null">
+                experience = #{experience},
+            </if>
+            <if test="salary != null">
+                salary = #{salary},
+            </if>
+        </set>
+        where username = #{username}
+    </update>
+
+
+    <delete id="deleteById">
+        delete
+        from employees
+        where username = #{username}
+    </delete>
+
+</mapper>
+

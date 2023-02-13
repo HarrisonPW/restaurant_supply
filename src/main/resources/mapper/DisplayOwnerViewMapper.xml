@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.DisplayOwnerViewMapper">
+
+    <resultMap type="com.example.restaurantsupply.model.DisplayOwnerView" id="DisplayOwnerViewMap">
+        <result property="username" column="username" />
+        <result property="firstName" column="first_name" />
+        <result property="lastName" column="last_name" />
+        <result property="address" column="address" />
+        <result property="numRestaurants" column="num_restaurants" />
+        <result property="numPlaces" column="num_places" />
+        <result property="highs" column="highs" />
+        <result property="lows" column="lows" />
+        <result property="debt" column="debt" />
+    </resultMap>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DisplayOwnerViewMap">
+        select
+          username, first_name, last_name, address, num_restaurants, num_places, highs, lows, debt
+        from display_owner_view
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="firstName != null and firstName != ''">
+                and first_name = #{firstName}
+            </if>
+            <if test="lastName != null and lastName != ''">
+                and last_name = #{lastName}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="numRestaurants != null">
+                and num_restaurants = #{numRestaurants}
+            </if>
+            <if test="numPlaces != null">
+                and num_places = #{numPlaces}
+            </if>
+            <if test="highs != null">
+                and highs = #{highs}
+            </if>
+            <if test="lows != null">
+                and lows = #{lows}
+            </if>
+            <if test="debt != null">
+                and debt = #{debt}
+            </if>
+        </where>
+    </select>
+
+</mapper>
+

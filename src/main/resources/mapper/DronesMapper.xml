@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.DronesMapper">
+
+    <resultMap type="com.example.restaurantsupply.domain.Drones" id="DronesMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="tag" column="tag" jdbcType="INTEGER"/>
+        <result property="fuel" column="fuel" jdbcType="INTEGER"/>
+        <result property="capacity" column="capacity" jdbcType="INTEGER"/>
+        <result property="sales" column="sales" jdbcType="INTEGER"/>
+        <result property="flownBy" column="flown_by" jdbcType="VARCHAR"/>
+        <result property="swarmId" column="swarm_id" jdbcType="VARCHAR"/>
+        <result property="swarmTag" column="swarm_tag" jdbcType="INTEGER"/>
+        <result property="hover" column="hover" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="DronesMap">
+        select id,
+               tag,
+               fuel,
+               capacity,
+               sales,
+               flown_by,
+               swarm_id,
+               swarm_tag,
+               hover
+        from drones
+        where id = #{id}
+    </select>
+
+
+    <select id="queryAllByLimit" resultMap="DronesMap">
+        select id,
+               tag,
+               fuel,
+               capacity,
+               sales,
+               flown_by,
+               swarm_id,
+               swarm_tag,
+               hover
+        from drones limit #{offset}, #{limit}
+    </select>
+
+
+    <select id="queryAll" resultMap="DronesMap">
+        select
+        id, tag, fuel, capacity, sales, flown_by, swarm_id, swarm_tag, hover
+        from drones
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="tag != null">
+                and tag = #{tag}
+            </if>
+            <if test="fuel != null">
+                and fuel = #{fuel}
+            </if>
+            <if test="capacity != null">
+                and capacity = #{capacity}
+            </if>
+            <if test="sales != null">
+                and sales = #{sales}
+            </if>
+            <if test="flownBy != null and flownBy != ''">
+                and flown_by = #{flownBy}
+            </if>
+            <if test="swarmId != null and swarmId != ''">
+                and swarm_id = #{swarmId}
+            </if>
+            <if test="swarmTag != null">
+                and swarm_tag = #{swarmTag}
+            </if>
+            <if test="hover != null and hover != ''">
+                and hover = #{hover}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        call add_drone(#{id}, #{tag}, #{fuel}, #{capacity}, #{sales}, #{flownBy})
+    </insert>
+
+
+    <update id="update">
+        update drones
+        <set>
+            <if test="fuel != null">
+                fuel = #{fuel},
+            </if>
+            <if test="capacity != null">
+                capacity = #{capacity},
+            </if>
+            <if test="sales != null">
+                sales = #{sales},
+            </if>
+            <if test="flownBy != null and flownBy != ''">
+                flown_by = #{flownBy},
+            </if>
+            <if test="swarmId != null and swarmId != ''">
+                swarm_id = #{swarmId},
+            </if>
+            <if test="swarmTag != null">
+                swarm_tag = #{swarmTag},
+            </if>
+            <if test="hover != null and hover != ''">
+                hover = #{hover},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="refuel">
+        call refuel_drone(#{id}, #{tag}, #{fuel})
+    </update>
+    <update id="joinSwarm">
+        call join_swarm(#{id}, #{swarmId}, #{swarmTag})
+    </update>
+    <update id="leaveSwarm">
+        call leave_swarm(#{id}, #{swarmTag})
+    </update>
+    <update id="flyDrone">
+        call fly_drone(#{id}, #{tag}, #{hover})
+    </update>
+    <update id="takeoverDrone">
+        call takeover_drone(#{hover}, #{id}, #{tag})
+    </update>
+
+
+    <delete id="delete">
+        call remove_drone(#{id}, #{tag})
+    </delete>
+
+</mapper>
+

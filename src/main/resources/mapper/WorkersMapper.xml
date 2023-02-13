@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.WorkersMapper">
+
+    <resultMap type="com.example.restaurantsupply.domain.Workers" id="WorkersMap">
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="WorkersMap">
+        select username
+        from workers
+        where username = #{username}
+    </select>
+
+
+    <select id="queryAllByLimit" resultMap="WorkersMap">
+        select username
+        from workers limit #{offset}, #{limit}
+    </select>
+
+
+    <select id="queryAll" resultMap="WorkersMap">
+        select
+        username
+        from workers
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" keyProperty="username" useGeneratedKeys="true">
+        call add_worker_role(#{username})
+    </insert>
+
+
+    <update id="update">
+        update workers
+        <set>
+        </set>
+        where username = #{username}
+    </update>
+
+
+    <delete id="deleteById">
+        delete
+        from workers
+        where username = #{username}
+    </delete>
+
+</mapper>
+

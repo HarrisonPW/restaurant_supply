@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.PilotsMapper">
+
+    <resultMap type="com.example.restaurantsupply.domain.Pilots" id="PilotsMap">
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="licenseid" column="licenseID" jdbcType="VARCHAR"/>
+        <result property="experience" column="experience" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="PilotsMap">
+        select username,
+               licenseID,
+               experience
+        from pilots
+        where username = #{username}
+    </select>
+
+
+    <select id="queryAllByLimit" resultMap="PilotsMap">
+        select username,
+               licenseID,
+               experience
+        from pilots limit #{offset}, #{limit}
+    </select>
+
+
+    <select id="queryAll" resultMap="PilotsMap">
+        select
+        username, licenseID, experience
+        from pilots
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="licenseid != null and licenseid != ''">
+                and licenseID = #{licenseid}
+            </if>
+            <if test="experience != null">
+                and experience = #{experience}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" keyProperty="username" useGeneratedKeys="true">
+        call add_pilot_role(#{username}, #{licenseid}, #{experience})
+    </insert>
+
+
+    <update id="update">
+        update pilots
+        <set>
+            <if test="licenseid != null and licenseid != ''">
+                licenseID = #{licenseid},
+            </if>
+            <if test="experience != null">
+                experience = #{experience},
+            </if>
+        </set>
+        where username = #{username}
+    </update>
+
+
+    <delete id="deleteById">
+        call remove_pilot_role(#{username})
+    </delete>
+
+</mapper>
+

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.RestaurantsMapper">
+
+    <resultMap type="com.example.restaurantsupply.domain.Restaurants" id="RestaurantsMap">
+        <result property="longName" column="long_name" jdbcType="VARCHAR"/>
+        <result property="rating" column="rating" jdbcType="INTEGER"/>
+        <result property="spent" column="spent" jdbcType="INTEGER"/>
+        <result property="location" column="location" jdbcType="VARCHAR"/>
+        <result property="fundedBy" column="funded_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="RestaurantsMap">
+        select long_name,
+               rating,
+               spent,
+               location,
+               funded_by
+        from restaurants
+        where long_name = #{longName}
+    </select>
+
+
+    <select id="queryAllByLimit" resultMap="RestaurantsMap">
+        select long_name,
+               rating,
+               spent,
+               location,
+               funded_by
+        from restaurants limit #{offset}, #{limit}
+    </select>
+
+
+    <select id="queryAll" resultMap="RestaurantsMap">
+        select
+        long_name, rating, spent, location, funded_by
+        from restaurants
+        <where>
+            <if test="longName != null and longName != ''">
+                and long_name = #{longName}
+            </if>
+            <if test="rating != null">
+                and rating = #{rating}
+            </if>
+            <if test="spent != null">
+                and spent = #{spent}
+            </if>
+            <if test="location != null and location != ''">
+                and location = #{location}
+            </if>
+            <if test="fundedBy != null and fundedBy != ''">
+                and funded_by = #{fundedBy}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" keyProperty="longName" useGeneratedKeys="true">
+        call add_restaurant(#{longName}, #{rating}, #{spent}, #{location})
+    </insert>
+
+
+    <update id="update">
+        update restaurants
+        <set>
+            <if test="rating != null">
+                rating = #{rating},
+            </if>
+            <if test="spent != null">
+                spent = #{spent},
+            </if>
+            <if test="location != null and location != ''">
+                location = #{location},
+            </if>
+            <if test="fundedBy != null and fundedBy != ''">
+                funded_by = #{fundedBy},
+            </if>
+        </set>
+        where long_name = #{longName}
+    </update>
+    <update id="startFunding">
+        call start_funding(#{owner}, #{longName})
+    </update>
+    <update id="purchaseIngredient">
+        call purchase_ingredient(#{longName}, #{id}, #{tag}, #{barcode}, #{quantity})
+    </update>
+
+
+    <delete id="deleteById">
+        delete
+        from restaurants
+        where long_name = #{longName}
+    </delete>
+
+</mapper>
+

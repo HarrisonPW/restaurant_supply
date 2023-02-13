@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.restaurantsupply.mapper.RestaurantOwnersMapper">
+
+    <resultMap type="com.example.restaurantsupply.domain.RestaurantOwners" id="RestaurantOwnersMap">
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryById" resultMap="RestaurantOwnersMap">
+        select username
+        from restaurant_owners
+        where username = #{username}
+    </select>
+
+
+    <select id="queryAllByLimit" resultMap="RestaurantOwnersMap">
+        select username
+        from restaurant_owners limit #{offset}, #{limit}
+    </select>
+
+
+    <select id="queryAll" resultMap="RestaurantOwnersMap">
+        select
+        username
+        from restaurant_owners
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insert" keyProperty="username" useGeneratedKeys="true">
+        call add_owner(#{username}, #{firstName}, #{lastName}, #{address}, #{birthdate})
+    </insert>
+
+
+    <update id="update">
+        update restaurant_owners
+        <set>
+        </set>
+        where username = #{username}
+    </update>
+
+
+    <delete id="deleteById">
+        delete
+        from restaurant_owners
+        where username = #{username}
+    </delete>
+
+</mapper>
+
